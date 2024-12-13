@@ -1,5 +1,6 @@
 import Placeholder from "@/components/placeholder";
 import { Button } from "@/components/ui/button";
+import TicketItem from "@/features/ticket/components/ticket-item";
 import { initialTickets } from "@/lib/data";
 import { paths } from "@/lib/paths";
 import Link from "next/link";
@@ -31,9 +32,8 @@ export default async function Page({ params }: Props) {
     );
 
   return (
-    <div>
-      <h2 className="text-lg">{ticket.title}</h2>
-      <p className="text-sm">{ticket.content}</p>
+    <div className="animate-fade-in-from-top flex justify-center">
+      <TicketItem ticket={ticket} isDetail />
     </div>
   );
 }
