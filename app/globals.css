@@ -2,6 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .\?R {
+    @apply bg-red-500/40 !important;
+  }
+  .\?G {
+    @apply bg-green-500/40 !important;
+  }
+  .\?B {
+    @apply bg-blue-500/40 !important;
+  }
+  .\?Y {
+    @apply bg-yellow-500/40 !important;
+  }
+  .\?P {
+    @apply bg-purple-500/40 !important;
+  }
+  .\?O {
+    @apply bg-orange-500/40 !important;
+  }
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
