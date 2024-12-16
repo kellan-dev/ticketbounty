@@ -11,8 +11,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { LucideCheck, LucideMoon, LucideSun } from "lucide-react";
 
-const themeDropdownItems = ["Light", "Dark", "System"];
-
 export default function ThemeSelect() {
   return (
     <DropdownMenu>
@@ -27,7 +25,7 @@ export default function ThemeSelect() {
         align="end"
         onCloseAutoFocus={(e) => e.preventDefault()}
       >
-        {themeDropdownItems.map((item) => (
+        {["Light", "Dark", "System"].map((item) => (
           <Item key={item} item={item} />
         ))}
       </DropdownMenuContent>
