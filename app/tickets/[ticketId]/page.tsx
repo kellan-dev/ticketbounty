@@ -1,9 +1,6 @@
-import Placeholder from "@/components/placeholder";
-import { Button } from "@/components/ui/button";
 import TicketItem from "@/features/ticket/components/ticket-item";
 import { getTicket } from "@/features/ticket/queries/get-ticket";
-import { paths } from "@/lib/paths";
-import Link from "next/link";
+import { notFound } from "next/navigation";
 
 // Params are async now, so we need to use a Promise
 // https://nextjs.org/docs/app/building-your-application/upgrading/version-15#async-request-apis-breaking-change
@@ -19,17 +16,7 @@ export default async function Page({ params }: Props) {
   const { ticketId } = await params;
   const ticket = await getTicket(ticketId);
 
-  if (!ticket)
-    return (
-      <Placeholder
-        label="Ticket not found"
-        button={
-          <Button asChild variant="outline">
-            <Link href={paths.tickets()}>Go back to Tickets</Link>
-          </Button>
-        }
-      />
-    );
+  if (!ticket) notFound();
 
   return (
     <div className="flex animate-fade-in-from-top justify-center">
