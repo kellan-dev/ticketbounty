@@ -16,7 +16,8 @@ type Props = {
 export default function TicketItem({ ticket, isDetail }: Props) {
   const detailButton = (
     <Button asChild variant="outline" size="icon">
-      <Link href={paths.ticket(ticket.id)}>
+      {/* Prefetch fetches and caches the page when the Link is in the viewport */}
+      <Link prefetch href={paths.ticket(ticket.id)}>
         <LucideSquareArrowOutUpRight className="h-4 w-4" />
       </Link>
     </Button>
