@@ -2,7 +2,11 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { paths } from "@/lib/paths";
 import Link from "next/link";
 import { TICKET_ICONS } from "@/features/ticket/constants";
-import { LucideSquareArrowOutUpRight, LucideTrash } from "lucide-react";
+import {
+  LucidePencil,
+  LucideSquareArrowOutUpRight,
+  LucideTrash,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Ticket } from "@prisma/client";
@@ -19,6 +23,14 @@ export default function TicketItem({ ticket, isDetail }: Props) {
       {/* Prefetch fetches and caches the page when the Link is in the viewport */}
       <Link prefetch href={paths.ticket(ticket.id)}>
         <LucideSquareArrowOutUpRight className="h-4 w-4" />
+      </Link>
+    </Button>
+  );
+
+  const editButton = (
+    <Button asChild variant="outline" size="icon">
+      <Link prefetch href={paths.editTicket(ticket.id)}>
+        <LucidePencil className="h-4 w-4" />
       </Link>
     </Button>
   );
@@ -57,7 +69,17 @@ export default function TicketItem({ ticket, isDetail }: Props) {
         </CardContent>
       </Card>
       <div className="flex flex-col gap-y-1">
-        {isDetail ? deleteButton : detailButton}
+        {isDetail ? (
+          <>
+            {editButton}
+            {deleteButton}
+          </>
+        ) : (
+          <>
+            {detailButton}
+            {editButton}
+          </>
+        )}
       </div>
     </div>
   );
