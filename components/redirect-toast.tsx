@@ -1,10 +1,15 @@
 "use client";
 
 import { deleteCookieByKey, getCookieByKey } from "@/actions/cookies";
+import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
 
 export default function RedirectToast() {
+  // Todo: Needed because of template.tsx issues with nested routes
+  // https://github.com/vercel/next.js/issues/60032
+  const pathname = usePathname();
+
   useEffect(() => {
     (async () => {
       const message = await getCookieByKey("toast");
@@ -13,6 +18,7 @@ export default function RedirectToast() {
         await deleteCookieByKey("toast");
       }
     })();
-  }, []);
+  }, [pathname]);
+
   return null;
 }
