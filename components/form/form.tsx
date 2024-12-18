@@ -7,15 +7,25 @@ type Props = {
   children: React.ReactNode;
   state: ActionState;
   action: (payload: FormData) => void;
+  onSuccess?: (state: ActionState) => void;
+  onError?: (state: ActionState) => void;
 };
 
-export default function Form({ children, state, action }: Props) {
+export default function Form({
+  children,
+  state,
+  action,
+  onSuccess,
+  onError,
+}: Props) {
   useActionFeedback(state, {
     onSuccess: ({ state }) => {
       if (state.message) toast.success(state.message);
+      onSuccess?.(state);
     },
     onError: ({ state }) => {
       if (state.message) toast.error(state.message);
+      onError?.(state);
     },
   });
 

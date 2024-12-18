@@ -92,3 +92,12 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/*
+Fix horizontal layout shift caused by shadcn DropdownMenu component
+https://github.com/shadcn-ui/ui/issues/977
+*/
+html > body[data-scroll-locked] {
+  overflow: visible !important;
+  margin-right: 0 !important;
+}

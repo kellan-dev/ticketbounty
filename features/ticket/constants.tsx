@@ -11,3 +11,9 @@ export const TICKET_ICONS: TicketIcons = {
   WORKING: <LucidePencil />,
   CLOSED: <LucideCircleCheck />,
 };
+
+export const TICKET_STATUS_LABELS = {
+  OPEN: "Open",
+  WORKING: "Working",
+  CLOSED: "Closed",
+};
