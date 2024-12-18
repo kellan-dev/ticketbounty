@@ -10,6 +10,8 @@ import { useActionState } from "react";
 import FieldError from "@/components/form/field-error";
 import { EMPTY_ACTION_STATE } from "@/components/form/utils/to-action-state";
 import Form from "@/components/form/form";
+import { toDollars } from "@/lib/currency";
+import { DatePicker } from "@/components/date-picker";
 
 type Props = {
   ticket?: Ticket;
@@ -41,6 +43,42 @@ export default function TicketUpsertForm({ ticket }: Props) {
         }
       />
       <FieldError state={state} name="content" />
+
+      <div className="mb-1 flex gap-x-2">
+        <div className="w-1/2">
+          <Label htmlFor="bounty">Bounty ($)</Label>
+          <Input
+            id="bounty"
+            name="bounty"
+            type="number"
+            step="0.01"
+            defaultValue={
+              (state.payload?.get("bounty") as string) ??
+              (ticket?.bounty ? toDollars(ticket?.bounty) : "")
+            }
+          />
+          <FieldError state={state} name="bounty" />
+        </div>
+        <div className="w-1/2">
+          <Label htmlFor="deadline">Deadline</Label>
+          {/* <Input
+            id="deadline"
+            name="deadline"
+            type="date"
+            defaultValue={
+              (state.payload?.get("deadline") as string) ?? ticket?.deadline
+            }
+          /> */}
+          <DatePicker
+            id="deadline"
+            name="deadline"
+            defaultValue={
+              (state.payload?.get("deadline") as string) ?? ticket?.deadline
+            }
+          />
+          <FieldError state={state} name="deadline" />
+        </div>
+      </div>
 
       <SubmitButton label={ticket ? "Update" : "Create"} />
     </Form>
