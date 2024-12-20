@@ -17,8 +17,15 @@ export const EMPTY_ACTION_STATE: ActionState = {
 export function toActionState(
   status: ActionState["status"],
   message: string,
+  formData?: FormData,
 ): ActionState {
-  return { status, message, fieldErrors: {}, timestamp: Date.now() };
+  return {
+    status,
+    message,
+    fieldErrors: {},
+    payload: formData,
+    timestamp: Date.now(),
+  };
 }
 
 export function fromErrorToActionState(

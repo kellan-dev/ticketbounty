@@ -14,7 +14,7 @@ import {
 import { TICKET_STATUS_LABELS } from "../constants";
 import { updateTicketStatus } from "../actions/update-ticket-status";
 import { toast } from "sonner";
-import useConfirmDialog from "@/lib/hooks/use-confirm-dialog";
+import useConfirmDialog from "@/hooks/use-confirm-dialog";
 import { deleteTicket } from "@/features/ticket/actions/delete-ticket";
 
 type Props = {

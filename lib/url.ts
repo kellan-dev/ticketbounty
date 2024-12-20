@@ -1,10 +1,7 @@
 export function getBaseUrl() {
-  const environment = process.env.NODE_ENV;
+  if (process.env.NEXT_PUBLIC_VERCEL_URL) {
+    return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
+  }
 
-  const baseUrl =
-    environment === "development"
-      ? "http://localhost:3000"
-      : `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
-
-  return baseUrl;
+  return "http://localhost:3000";
 }
