@@ -9,6 +9,10 @@ import {
 import type { User as DatabaseUser, Session } from "@prisma/client";
 import { cookies } from "next/headers";
 
+const SESSION_COOKIE_NAME = "auth_session";
+const SESSION_REFRESH_THRESHOLD = 1000 * 60 * 60 * 24 * 15;
+const SESSION_EXPIRATION_THRESHOLD = 1000 * 60 * 60 * 24 * 30;
+
 // These are the attributes that will be returned in the user object when a user is authenticated.
 type AuthUser = {
   username: string;
@@ -82,7 +86,7 @@ export async function createSessionRecord(
   const id = hashSessionToken(token);
 
   // The token will expire after 30 days
-  const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30);
+  const expiresAt = new Date(Date.now() + SESSION_EXPIRATION_THRESHOLD);
 
   // Create the session record in the database
   const session = await prisma.session.create({
@@ -114,8 +118,8 @@ export async function validateSessionToken(token: string): Promise<AuthState> {
   }
 
   // If the session is within 15 days of expiration, refresh it
-  if (Date.now() >= session.expiresAt.getTime() - 1000 * 60 * 60 * 24 * 15) {
-    session.expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30);
+  if (Date.now() >= session.expiresAt.getTime() - SESSION_REFRESH_THRESHOLD) {
+    session.expiresAt = new Date(Date.now() + SESSION_EXPIRATION_THRESHOLD);
     await prisma.session.update({
       where: { id },
       data: { expiresAt: session.expiresAt },
@@ -156,7 +160,7 @@ export async function setSessionTokenCookie(
   expiresAt: Date,
 ): Promise<void> {
   const cookieStore = await cookies();
-  cookieStore.set("auth_session", token, {
+  cookieStore.set(SESSION_COOKIE_NAME, token, {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
@@ -172,7 +176,7 @@ export async function setSessionTokenCookie(
  */
 export async function clearSessionTokenCookie(): Promise<void> {
   const cookieStore = await cookies();
-  cookieStore.set("auth_session", "", {
+  cookieStore.set(SESSION_COOKIE_NAME, "", {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
