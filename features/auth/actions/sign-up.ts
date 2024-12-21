@@ -8,11 +8,10 @@ import {
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { hash } from "@node-rs/argon2";
-import { lucia } from "@/lib/lucia";
-import { cookies } from "next/headers";
 import { paths } from "@/lib/paths";
 import { redirect } from "next/navigation";
 import { Prisma } from "@prisma/client";
+import { createSession } from "@/features/auth/auth";
 
 const signUpSchema = z
   .object({
@@ -54,14 +53,7 @@ export default async function signUp(state: ActionState, formData: FormData) {
       },
     });
 
-    const session = await lucia.createSession(user.id, {});
-    const sessionCookie = lucia.createSessionCookie(session.id);
-
-    (await cookies()).set(
-      sessionCookie.name,
-      sessionCookie.value,
-      sessionCookie.attributes,
-    );
+    await createSession(user.id);
   } catch (error) {
     if (
       error instanceof Prisma.PrismaClientKnownRequestError &&

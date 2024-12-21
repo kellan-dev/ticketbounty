@@ -10,8 +10,7 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { verify } from "@node-rs/argon2";
-import { lucia } from "@/lib/lucia";
-import { cookies } from "next/headers";
+import { createSession } from "@/features/auth/auth";
 
 const signInSchema = z.object({
   email: z.string().min(1, { message: "Required field" }).max(191).email(),
@@ -32,14 +31,7 @@ export default async function signIn(state: ActionState, formData: FormData) {
     if (!validPassword)
       return toActionState("error", "Incorrect email or password", formData);
 
-    const session = await lucia.createSession(user.id, {});
-    const sessionCookie = lucia.createSessionCookie(session.id);
-
-    (await cookies()).set(
-      sessionCookie.name,
-      sessionCookie.value,
-      sessionCookie.attributes,
-    );
+    await createSession(user.id);
   } catch (error) {
     return fromErrorToActionState(error, formData);
   }

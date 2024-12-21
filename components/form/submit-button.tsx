@@ -10,6 +10,7 @@ export default function SubmitButton({
   icon,
   variant = "default",
   size = "default",
+  disabled = false,
 }: {
   label?: string;
   icon?: React.ReactElement & { props: { className?: string } };
@@ -21,10 +22,16 @@ export default function SubmitButton({
     | "ghost"
     | "link";
   size?: "default" | "sm" | "lg" | "icon";
+  disabled?: boolean;
 }) {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" disabled={pending} size={size} variant={variant}>
+    <Button
+      type="submit"
+      disabled={pending || disabled}
+      size={size}
+      variant={variant}
+    >
       {pending && <LucideLoaderCircle className="h-4 w-4 animate-spin" />}
       {label}
       {!pending && icon && cloneElement(icon, { className: "h-4 w-4" })}
