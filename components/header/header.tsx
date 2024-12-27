@@ -4,12 +4,12 @@ import Link from "next/link";
 import { LucideKanban } from "lucide-react";
 import { paths } from "@/lib/paths";
 import ThemeSelect from "@/components/theme/theme-select";
-import { getAuth } from "@/features/auth/auth";
 import PublicNav from "./public-nav";
 import ProtectedNav from "./protected-nav";
+import { lucia } from "@/lib/lucia";
 
 export default async function Header() {
-  const { session } = await getAuth();
+  const { session } = await lucia.auth();
 
   return (
     <header>

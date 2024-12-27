@@ -11,7 +11,7 @@ import { hash } from "@node-rs/argon2";
 import { paths } from "@/lib/paths";
 import { redirect } from "next/navigation";
 import { Prisma } from "@prisma/client";
-import { createSession } from "@/features/auth/auth";
+import { lucia } from "@/lib/lucia";
 
 const signUpSchema = z
   .object({
@@ -53,7 +53,7 @@ export default async function signUp(state: ActionState, formData: FormData) {
       },
     });
 
-    await createSession(user.id);
+    await lucia.createSession(user.id);
   } catch (error) {
     if (
       error instanceof Prisma.PrismaClientKnownRequestError &&

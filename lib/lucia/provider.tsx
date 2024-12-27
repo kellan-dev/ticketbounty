@@ -1,24 +1,40 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
-import { AuthState } from "./auth-core";
+import {
+  createContext,
+  Suspense,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { usePathname, useSearchParams } from "next/navigation";
-import { authAction } from "./auth-action";
+import { AuthState } from "./core";
+import { authAction } from "./action";
 
 const AuthContext = createContext<AuthState | null>(null);
 
-export default function AuthProvider({ children }: React.PropsWithChildren) {
+export default function AuthProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <Suspense>
+      <AuthProviderContent>{children}</AuthProviderContent>
+    </Suspense>
+  );
+}
+
+function AuthProviderContent({ children }: { children: React.ReactNode }) {
   const [authState, setAuthState] = useState<AuthState | null>(null);
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const refresh = async () => {
-    const auth = await authAction();
-    setAuthState(auth);
-  };
-
   useEffect(() => {
-    refresh();
+    (async () => {
+      const auth = await authAction();
+      setAuthState(auth);
+    })();
   }, [pathname, searchParams]);
 
   return <AuthContext value={authState}>{children}</AuthContext>;
@@ -26,8 +42,10 @@ export default function AuthProvider({ children }: React.PropsWithChildren) {
 
 export function useAuth() {
   const context = useContext(AuthContext);
+
   if (context === undefined) {
     throw new Error("useAuth must be used within a AuthProvider");
   }
+
   return context;
 }
