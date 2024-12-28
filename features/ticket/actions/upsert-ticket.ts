@@ -7,6 +7,7 @@ import {
   toActionState,
 } from "@/components/form/utils/to-action-state";
 import { toCents } from "@/lib/currency";
+import { lucia } from "@/lib/lucia";
 import { paths } from "@/lib/paths";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
@@ -26,6 +27,9 @@ export async function upsertTicket(
   _state: ActionState,
   formData: FormData,
 ) {
+  const { user } = await lucia.auth();
+  if (!user) redirect(paths.signIn());
+
   try {
     const { title, content, bounty, deadline } = upsertTicketSchema.parse({
       title: formData.get("title") as string,
@@ -35,6 +39,7 @@ export async function upsertTicket(
     });
 
     const data = {
+      userId: user.id,
       title,
       content,
       bounty: toCents(bounty),
