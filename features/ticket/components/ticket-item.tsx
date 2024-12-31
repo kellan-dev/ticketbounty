@@ -18,6 +18,8 @@ import { cn } from "@/lib/utils";
 import { Prisma } from "@prisma/client";
 import { toCurrencyFromCents } from "@/lib/currency";
 import TicketMoreMenu from "./ticket-more-menu";
+import { lucia } from "@/lib/lucia";
+import { isOwner } from "@/lib/utils";
 
 type Props = {
   ticket: Prisma.TicketGetPayload<{
@@ -26,7 +28,10 @@ type Props = {
   isDetail?: boolean;
 };
 
-export default function TicketItem({ ticket, isDetail }: Props) {
+export default async function TicketItem({ ticket, isDetail }: Props) {
+  const { user } = await lucia.auth();
+  const isTicketOwner = isOwner(user, ticket);
+
   const detailButton = (
     <Button asChild variant="outline" size="icon">
       {/* Prefetch fetches and caches the page when the Link is in the viewport */}
@@ -36,7 +41,7 @@ export default function TicketItem({ ticket, isDetail }: Props) {
     </Button>
   );
 
-  const editButton = (
+  const editButton = isTicketOwner && (
     <Button asChild variant="outline" size="icon">
       <Link prefetch href={paths.editTicket(ticket.id)}>
         <LucidePencil className="h-4 w-4" />
@@ -44,7 +49,7 @@ export default function TicketItem({ ticket, isDetail }: Props) {
     </Button>
   );
 
-  const moreMenu = (
+  const moreMenu = isTicketOwner && (
     <TicketMoreMenu
       ticket={ticket}
       trigger={

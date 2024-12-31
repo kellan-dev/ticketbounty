@@ -6,11 +6,19 @@ import { paths } from "@/lib/paths";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { lucia } from "@/lib/lucia";
+import { isOwner } from "@/lib/utils";
+import { toActionState } from "@/components/form/utils/to-action-state";
 
 export async function deleteTicket(id: string) {
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+  const { user } = await lucia.authOrRedirect(paths.signIn());
 
   try {
+    const ticket = await prisma.ticket.findUnique({ where: { id } });
+    if (!ticket || !isOwner(user, ticket)) {
+      return toActionState("error", "Unauthorized");
+    }
+
     await prisma.ticket.delete({ where: { id } });
   } catch (error) {
     return fromErrorToActionState(error);

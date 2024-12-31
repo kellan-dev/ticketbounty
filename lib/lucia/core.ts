@@ -10,6 +10,7 @@ import type {
   User as DatabaseUser,
   Session as DatabaseSession,
 } from "@prisma/client";
+import { redirect } from "next/navigation";
 
 // Default shape for authenticated user
 export interface AuthUser {
@@ -57,6 +58,9 @@ interface LuciaConfig {
 
 export interface LuciaInstance {
   auth: () => Promise<AuthState>;
+  authOrRedirect: (
+    path: string,
+  ) => Promise<{ session: AuthSession; user: AuthUser }>;
   createSession: (userId: UserId) => Promise<void>;
   invalidateSession: () => Promise<void>;
 }
@@ -350,6 +354,17 @@ export function createLucia(
   });
 
   /**
+   * Authenticates a user by validating their session token and redirects to the provided path if not authenticated.
+   * @param path The path to redirect to if the user is not authenticated.
+   * @returns The authenticated session and user, or null values if not authenticated.
+   */
+  async function authOrRedirect(path: string) {
+    const authState = await auth();
+    if (!authState.user) redirect(path);
+    return authState;
+  }
+
+  /**
    * Creates a new session for a given user ID by creating a new session record in the database and setting a session token cookie.
    * @param userId The ID of the user associated with the session.
    */
@@ -380,7 +395,7 @@ export function createLucia(
   }
 
   // Public API
-  const lucia = { auth, createSession, invalidateSession };
+  const lucia = { auth, authOrRedirect, createSession, invalidateSession };
 
   _luciaInstance = lucia;
 

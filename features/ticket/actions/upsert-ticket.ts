@@ -10,6 +10,7 @@ import { toCents } from "@/lib/currency";
 import { lucia } from "@/lib/lucia";
 import { paths } from "@/lib/paths";
 import { prisma } from "@/lib/prisma";
+import { isOwner } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -27,10 +28,16 @@ export async function upsertTicket(
   _state: ActionState,
   formData: FormData,
 ) {
-  const { user } = await lucia.auth();
-  if (!user) redirect(paths.signIn());
+  const { user } = await lucia.authOrRedirect(paths.signIn());
 
   try {
+    if (id) {
+      const ticket = await prisma.ticket.findUnique({ where: { id } });
+      if (!ticket || !isOwner(user, ticket)) {
+        return toActionState("error", "Unauthorized");
+      }
+    }
+
     const { title, content, bounty, deadline } = upsertTicketSchema.parse({
       title: formData.get("title") as string,
       content: formData.get("content") as string,

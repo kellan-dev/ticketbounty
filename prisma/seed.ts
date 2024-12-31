@@ -128,15 +128,18 @@ const seed = async () => {
 
   // create admin user
   const passwordHash = await hash("password");
-  const user = await prisma.user.create({
+  const admin = await prisma.user.create({
     data: { username: "admin", email: "admin@admin.com", passwordHash },
+  });
+  const user = await prisma.user.create({
+    data: { username: "user", email: "user@user.com", passwordHash },
   });
 
   // create tickets
   await prisma.ticket.createMany({
-    data: tickets.map((ticket) => ({
+    data: tickets.map((ticket, index) => ({
       ...ticket,
-      userId: user.id,
+      userId: index > 10 ? user.id : admin.id,
     })),
   });
 
