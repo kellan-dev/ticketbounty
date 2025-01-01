@@ -1,30 +1,9 @@
-"use client";
+import { lucia } from "@/lib/lucia";
+import AccountDropdown from "./account-dropdown";
 
-import Link from "next/link";
-import signOut from "@/features/auth/actions/sign-out";
-import SubmitButton from "@/components/form/submit-button";
-import { buttonVariants } from "@/components/ui/button";
-import { LucideLogOut } from "lucide-react";
-import { paths } from "@/lib/paths";
+export default async function ProtectedNav() {
+  const { user } = await lucia.auth();
+  if (!user) return null;
 
-export default function ProtectedNav() {
-  return (
-    <>
-      <Link
-        href={paths.tickets()}
-        className={buttonVariants({ variant: "default" })}
-      >
-        Tickets
-      </Link>
-
-      <form
-        onSubmit={async (e) => {
-          e.preventDefault();
-          await signOut().catch(() => {});
-        }}
-      >
-        <SubmitButton label="Sign Out" icon={<LucideLogOut />} />
-      </form>
-    </>
-  );
+  return <AccountDropdown user={user} />;
 }

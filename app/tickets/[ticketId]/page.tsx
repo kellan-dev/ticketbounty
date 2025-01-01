@@ -3,6 +3,8 @@ import { getTicket } from "@/features/ticket/queries/get-ticket";
 import { notFound } from "next/navigation";
 import { lucia } from "@/lib/lucia";
 import { paths } from "@/lib/paths";
+import Breadcrumbs from "@/components/breadcrumbs";
+import { Separator } from "@/components/ui/separator";
 
 // Params are async now, so we need to use a Promise
 // https://nextjs.org/docs/app/building-your-application/upgrading/version-15#async-request-apis-breaking-change
@@ -23,8 +25,17 @@ export default async function Page({ params }: Props) {
   if (!ticket) notFound();
 
   return (
-    <div className="flex animate-fade-in-from-top justify-center">
-      <TicketItem ticket={ticket} isDetail />
+    <div className="flex flex-1 flex-col gap-y-8">
+      <Breadcrumbs
+        breadcrumbs={[
+          { title: "Tickets", href: paths.home() },
+          { title: ticket.title },
+        ]}
+      />
+      <Separator />
+      <div className="flex animate-fade-in-from-top justify-center">
+        <TicketItem ticket={ticket} isDetail />
+      </div>
     </div>
   );
 }

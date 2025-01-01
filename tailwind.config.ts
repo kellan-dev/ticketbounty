@@ -77,10 +77,23 @@ export default {
             transform: "translateY(0)",
           },
         },
+        "sidebar-from-left": {
+          "0%": {
+            opacity: "0",
+            transform: "translateX(-100%)",
+            background: "transparent",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateX(0)",
+            background: "hsl(var(--background))",
+          },
+        },
       },
       animation: {
         "fade-in-from-top": "fade-in-from-top 0.5s ease-out",
         "header-from-top": "header-from-top 0.5s ease-out",
+        "sidebar-from-left": "sidebar-from-left 0.5s ease-out forwards",
       },
       borderRadius: {
         lg: "var(--radius)",

@@ -5,6 +5,8 @@ import { notFound } from "next/navigation";
 import { lucia } from "@/lib/lucia";
 import { paths } from "@/lib/paths";
 import { isOwner } from "@/lib/utils";
+import Breadcrumbs from "@/components/breadcrumbs";
+import { Separator } from "@/components/ui/separator";
 
 type Params = Promise<{
   ticketId: string;
@@ -26,13 +28,23 @@ export default async function Page({ params }: Props) {
   if (!isTicketFound || !isTicketOwner) notFound();
 
   return (
-    <div className="flex flex-1 flex-col items-center justify-center">
-      <CardCompact
-        className="w-full max-w-[420px] animate-fade-in-from-top"
-        title="Edit Ticket"
-        description="Edit an existing ticket"
-        content={<TicketUpsertForm ticket={ticket} />}
+    <div className="flex flex-1 flex-col gap-y-8">
+      <Breadcrumbs
+        breadcrumbs={[
+          { title: "Tickets", href: paths.home() },
+          { title: ticket.title, href: paths.ticket(ticket.id) },
+          { title: "Edit" },
+        ]}
       />
+      <Separator />
+      <div className="flex flex-1 flex-col items-center justify-center">
+        <CardCompact
+          className="w-full max-w-[420px] animate-fade-in-from-top"
+          title="Edit Ticket"
+          description="Edit an existing ticket"
+          content={<TicketUpsertForm ticket={ticket} />}
+        />
+      </div>
     </div>
   );
 }

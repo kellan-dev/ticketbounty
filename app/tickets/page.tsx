@@ -8,11 +8,11 @@ import { lucia } from "@/lib/lucia";
 import { paths } from "@/lib/paths";
 
 export default async function Page() {
-  await lucia.authOrRedirect(paths.signIn());
+  const { user } = await lucia.authOrRedirect(paths.signIn());
 
   return (
     <div className="flex flex-1 flex-col gap-y-8">
-      <Heading title="Tickets" description="All your tickets in one place" />
+      <Heading title="My Tickets" description="Tickets created by you" />
 
       <CardCompact
         className="w-full max-w-[420px] self-center"
@@ -22,7 +22,7 @@ export default async function Page() {
       />
 
       <Suspense fallback={<Spinner />}>
-        <TicketList />
+        <TicketList userId={user.id} />
       </Suspense>
     </div>
   );
