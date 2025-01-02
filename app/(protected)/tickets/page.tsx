@@ -6,8 +6,13 @@ import CardCompact from "@/components/card-compact";
 import TicketUpsertForm from "@/features/ticket/components/ticket-upsert-form";
 import { lucia } from "@/lib/lucia";
 import { paths } from "@/lib/paths";
+import { SearchParams } from "@/features/ticket/search-params";
 
-export default async function Page() {
+type Props = {
+  searchParams: Promise<SearchParams>;
+};
+
+export default async function Page({ searchParams }: Props) {
   const { user } = await lucia.authOrRedirect(paths.signIn());
 
   return (
@@ -22,7 +27,7 @@ export default async function Page() {
       />
 
       <Suspense fallback={<Spinner />}>
-        <TicketList userId={user.id} />
+        <TicketList userId={user.id} searchParams={await searchParams} />
       </Suspense>
     </div>
   );
