@@ -4,11 +4,12 @@ import { ParsedSearchParams } from "@/features/ticket/search-params";
 import Placeholder from "@/components/placeholder";
 import TicketSearchInput from "@/features/ticket/components/ticket-search-input";
 import TicketSortSelect from "@/features/ticket/components/ticket-sort-select";
+import TicketPagination from "@/features/ticket/components/ticket-pagination";
 
 type Props = { userId?: string; searchParams: ParsedSearchParams };
 
 export default async function TicketList({ userId, searchParams }: Props) {
-  const tickets = await getTickets(userId, searchParams);
+  const { list: tickets, metadata } = await getTickets(userId, searchParams);
 
   return (
     <section className="flex flex-1 animate-fade-in-from-top flex-col items-center gap-y-4">
@@ -34,6 +35,9 @@ export default async function TicketList({ userId, searchParams }: Props) {
       ) : (
         <Placeholder label="No tickets found" />
       )}
+      <div className="w-full max-w-[420px]">
+        <TicketPagination metadata={metadata} />
+      </div>
     </section>
   );
 }

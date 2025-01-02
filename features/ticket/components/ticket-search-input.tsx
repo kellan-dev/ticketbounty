@@ -10,6 +10,7 @@ type Props = {
 
 export default function TicketSearchInput({ placeholder }: Props) {
   const [search, setSearch] = useQueryState("search", searchParser);
+
   return (
     <SearchInput
       value={search}
