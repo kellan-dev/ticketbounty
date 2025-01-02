@@ -6,7 +6,8 @@ import CardCompact from "@/components/card-compact";
 import TicketUpsertForm from "@/features/ticket/components/ticket-upsert-form";
 import { lucia } from "@/lib/lucia";
 import { paths } from "@/lib/paths";
-import { SearchParams } from "@/features/ticket/search-params";
+import { SearchParams } from "nuqs/server";
+import { searchParamsCache } from "@/features/ticket/search-params";
 
 type Props = {
   searchParams: Promise<SearchParams>;
@@ -27,7 +28,10 @@ export default async function Page({ searchParams }: Props) {
       />
 
       <Suspense fallback={<Spinner />}>
-        <TicketList userId={user.id} searchParams={await searchParams} />
+        <TicketList
+          userId={user.id}
+          searchParams={searchParamsCache.parse(await searchParams)}
+        />
       </Suspense>
     </div>
   );
