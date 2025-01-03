@@ -1,17 +1,13 @@
 import { Card } from "@/components/ui/card";
 import { CommentWithMetadata } from "../types";
 import CommentItemMenu from "./comment-item-menu";
-import { lucia } from "@/lib/lucia";
-import { isOwner } from "@/lib/utils";
+import { format } from "date-fns";
 
 type Props = {
   comment: CommentWithMetadata;
 };
 
-export default async function CommentItem({ comment }: Props) {
-  const { user } = await lucia.auth();
-  const isCommentOwner = isOwner(user, comment);
-
+export default function CommentItem({ comment }: Props) {
   return (
     <Card className="group relative flex flex-1 flex-col gap-y-1 p-4">
       <div className="flex justify-between">
@@ -19,11 +15,11 @@ export default async function CommentItem({ comment }: Props) {
           {comment.user?.username ?? "Deleted User"}
         </p>
         <p className="text-sm text-muted-foreground">
-          {comment.createdAt.toLocaleString()}
+          {format(comment.createdAt, "yyyy-MM-dd, HH:mm")}
         </p>
       </div>
       <p className="whitespace-pre-line">{comment.content}</p>
-      {isCommentOwner && <CommentItemMenu comment={comment} />}
+      {comment.isOwner && <CommentItemMenu comment={comment} />}
     </Card>
   );
 }

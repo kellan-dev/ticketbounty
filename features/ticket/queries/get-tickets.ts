@@ -1,11 +1,15 @@
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { ParsedSearchParams } from "@/features/ticket/search-params";
+import { lucia } from "@/lib/lucia";
+import { isOwner } from "@/lib/utils";
 
 export async function getTickets(
   userId: string | undefined,
   searchParams: ParsedSearchParams,
 ) {
+  const { user } = await lucia.auth();
+
   const where = {
     userId,
     title: {
@@ -39,7 +43,10 @@ export async function getTickets(
   ]);
 
   return {
-    list: tickets,
+    list: tickets.map((ticket) => ({
+      ...ticket,
+      isOwner: isOwner(user, ticket),
+    })),
     metadata: { count, hasNextPage: count > skip + take },
   };
 }
