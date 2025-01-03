@@ -21,6 +21,9 @@ import TicketMoreMenu from "./ticket-more-menu";
 import { lucia } from "@/lib/lucia";
 import { isOwner } from "@/lib/utils";
 import Comments from "@/features/comment/components/comments";
+import CommentCreateForm from "@/features/comment/components/comment-create-form";
+import { Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Props = {
   ticket: Prisma.TicketGetPayload<{
@@ -107,7 +110,18 @@ export default async function TicketItem({ ticket, isDetail }: Props) {
           {moreMenu}
         </div>
       </div>
-      {isDetail && <Comments ticketId={ticket.id} />}
+      <div className="ml-4 flex flex-col gap-y-4">
+        <CommentCreateForm ticketId={ticket.id} />
+        {isDetail && (
+          <Suspense
+            fallback={Array.from({ length: 3 }).map((_, i) => (
+              <Skeleton key={i} className="ml-4 h-24" />
+            ))}
+          >
+            <Comments ticketId={ticket.id} />
+          </Suspense>
+        )}
+      </div>
     </div>
   );
 }
