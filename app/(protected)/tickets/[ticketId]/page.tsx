@@ -5,6 +5,7 @@ import { lucia } from "@/lib/lucia";
 import { paths } from "@/lib/paths";
 import Breadcrumbs from "@/components/breadcrumbs";
 import { Separator } from "@/components/ui/separator";
+import { getComments } from "@/features/comment/queries/get-comments";
 
 // Params are async now, so we need to use a Promise
 // https://nextjs.org/docs/app/building-your-application/upgrading/version-15#async-request-apis-breaking-change
@@ -20,7 +21,14 @@ export default async function Page({ params }: Props) {
   await lucia.authOrRedirect(paths.signIn());
 
   const { ticketId } = await params;
-  const ticket = await getTicket(ticketId);
+
+  const ticketPromise = getTicket(ticketId);
+  const commentsPromise = getComments(ticketId);
+
+  const [ticket, comments] = await Promise.all([
+    ticketPromise,
+    commentsPromise,
+  ]);
 
   if (!ticket) notFound();
 
@@ -34,7 +42,7 @@ export default async function Page({ params }: Props) {
       />
       <Separator />
       <div className="flex animate-fade-in-from-top justify-center">
-        <TicketItem ticket={ticket} isDetail />
+        <TicketItem ticket={ticket} comments={comments} isDetail />
       </div>
     </div>
   );

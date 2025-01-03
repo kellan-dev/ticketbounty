@@ -22,17 +22,21 @@ import { lucia } from "@/lib/lucia";
 import { isOwner } from "@/lib/utils";
 import Comments from "@/features/comment/components/comments";
 import CommentCreateForm from "@/features/comment/components/comment-create-form";
-import { Suspense } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { CommentWithMetadata } from "@/features/comment/types";
 
 type Props = {
   ticket: Prisma.TicketGetPayload<{
     include: { user: { select: { username: true } } };
   }>;
+  comments?: CommentWithMetadata[];
   isDetail?: boolean;
 };
 
-export default async function TicketItem({ ticket, isDetail }: Props) {
+export default async function TicketItem({
+  ticket,
+  comments,
+  isDetail,
+}: Props) {
   const { user } = await lucia.auth();
   const isTicketOwner = isOwner(user, ticket);
 
@@ -112,15 +116,7 @@ export default async function TicketItem({ ticket, isDetail }: Props) {
       </div>
       <div className="ml-4 flex flex-col gap-y-4">
         <CommentCreateForm ticketId={ticket.id} />
-        {isDetail && (
-          <Suspense
-            fallback={Array.from({ length: 3 }).map((_, i) => (
-              <Skeleton key={i} className="ml-4 h-24" />
-            ))}
-          >
-            <Comments ticketId={ticket.id} />
-          </Suspense>
-        )}
+        {isDetail && <Comments comments={comments} />}
       </div>
     </div>
   );
