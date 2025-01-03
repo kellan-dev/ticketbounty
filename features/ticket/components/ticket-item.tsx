@@ -1,6 +1,3 @@
-// Note: Converting this to a client component was just an exercise, not a necessity.
-"use client";
-
 import {
   Card,
   CardHeader,
@@ -21,15 +18,13 @@ import { cn } from "@/lib/utils";
 import { Prisma } from "@prisma/client";
 import { toCurrencyFromCents } from "@/lib/currency";
 import TicketMoreMenu from "./ticket-more-menu";
-import Comments from "@/features/comment/components/comments";
 import CommentCreateForm from "@/features/comment/components/comment-create-form";
-import { CommentWithMetadata } from "@/features/comment/types";
 
 type Props = {
   ticket: Prisma.TicketGetPayload<{
     include: { user: { select: { username: true } } };
   }> & { isOwner: boolean };
-  comments?: CommentWithMetadata[];
+  comments?: React.ReactNode;
   isDetail?: boolean;
 };
 
@@ -111,7 +106,7 @@ export default function TicketItem({ ticket, comments, isDetail }: Props) {
       {isDetail && (
         <div className="ml-4 flex flex-col gap-y-4">
           <CommentCreateForm ticketId={ticket.id} />
-          <Comments comments={comments} />
+          {comments}
         </div>
       )}
     </div>

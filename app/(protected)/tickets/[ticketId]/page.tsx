@@ -6,6 +6,7 @@ import { paths } from "@/lib/paths";
 import Breadcrumbs from "@/components/breadcrumbs";
 import { Separator } from "@/components/ui/separator";
 import { getComments } from "@/features/comment/queries/get-comments";
+import Comments from "@/features/comment/components/comments";
 
 // Params are async now, so we need to use a Promise
 // https://nextjs.org/docs/app/building-your-application/upgrading/version-15#async-request-apis-breaking-change
@@ -42,7 +43,11 @@ export default async function Page({ params }: Props) {
       />
       <Separator />
       <div className="flex animate-fade-in-from-top justify-center">
-        <TicketItem ticket={ticket} comments={comments} isDetail />
+        <TicketItem
+          ticket={ticket}
+          isDetail
+          comments={<Comments comments={comments} />}
+        />
       </div>
     </div>
   );
