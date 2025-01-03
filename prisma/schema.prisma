@@ -9,15 +9,16 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  email        String    @unique
-  username     String    @unique
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  email        String   @unique
+  username     String   @unique
   passwordHash String
-  sessions     Session[]
-  tickets      Ticket[]
+
+  sessions Session[]
+  tickets  Ticket[]
+  comments Comment[]
 }
 
 model Session {
@@ -25,27 +26,27 @@ model Session {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   expiresAt DateTime
+  userId    String
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // Todo: learn more about this
   @@index([userId])
 }
 
 model Ticket {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String       @id @default(cuid())
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  title     String
+  content   String       @db.VarChar(1024)
+  status    TicketStatus @default(OPEN)
+  deadline  String
+  bounty    Int
+  userId    String
 
-  title    String
-  content  String       @db.VarChar(1024)
-  status   TicketStatus @default(OPEN)
-  deadline String
-  bounty   Int
+  comments Comment[]
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }
@@ -54,4 +55,19 @@ enum TicketStatus {
   OPEN
   CLOSED
   WORKING
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  content   String   @db.VarChar(1024)
+  userId    String?
+  ticketId  String
+
+  user   User?  @relation(fields: [userId], references: [id], onDelete: SetNull)
+  ticket Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([ticketId])
 }

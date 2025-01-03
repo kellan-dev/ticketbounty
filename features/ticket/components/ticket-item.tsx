@@ -20,6 +20,7 @@ import { toCurrencyFromCents } from "@/lib/currency";
 import TicketMoreMenu from "./ticket-more-menu";
 import { lucia } from "@/lib/lucia";
 import { isOwner } from "@/lib/utils";
+import Comments from "@/features/comment/components/comments";
 
 type Props = {
   ticket: Prisma.TicketGetPayload<{
@@ -63,47 +64,50 @@ export default async function TicketItem({ ticket, isDetail }: Props) {
   return (
     <div
       className={cn(
-        "flex w-full max-w-[420px] gap-x-1",
+        "flex w-full max-w-[420px] flex-col gap-y-8",
         isDetail ? "max-w-[580px]" : "max-w-[420px]",
       )}
     >
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-x-2">
-            <h3>{TICKET_ICONS[ticket.status]}</h3>
-            <p className="truncate">{ticket.title}</p>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p
-            className={cn(
-              "whitespace-break-spaces",
-              !isDetail && "line-clamp-3",
-            )}
-          >
-            {ticket.content}
-          </p>
-        </CardContent>
-        <CardFooter className="flex justify-between">
-          <p className="text-sm text-muted-foreground">
-            {ticket.deadline} by {ticket.user.username}
-          </p>
-          <p className="text-sm text-muted-foreground">
-            {toCurrencyFromCents(ticket.bounty)}
-          </p>
-        </CardFooter>
-      </Card>
-      <div className="flex flex-col gap-y-1">
-        {isDetail ? (
-          <>{editButton}</>
-        ) : (
-          <>
-            {detailButton}
-            {editButton}
-          </>
-        )}
-        {moreMenu}
+      <div className="flex gap-x-1">
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-x-2">
+              <h3>{TICKET_ICONS[ticket.status]}</h3>
+              <p className="truncate">{ticket.title}</p>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p
+              className={cn(
+                "whitespace-break-spaces",
+                !isDetail && "line-clamp-3",
+              )}
+            >
+              {ticket.content}
+            </p>
+          </CardContent>
+          <CardFooter className="flex justify-between">
+            <p className="text-sm text-muted-foreground">
+              {ticket.deadline} by {ticket.user.username}
+            </p>
+            <p className="text-sm text-muted-foreground">
+              {toCurrencyFromCents(ticket.bounty)}
+            </p>
+          </CardFooter>
+        </Card>
+        <div className="flex flex-col gap-y-1">
+          {isDetail ? (
+            <>{editButton}</>
+          ) : (
+            <>
+              {detailButton}
+              {editButton}
+            </>
+          )}
+          {moreMenu}
+        </div>
       </div>
+      {isDetail && <Comments ticketId={ticket.id} />}
     </div>
   );
 }

@@ -6,12 +6,14 @@ import { cloneElement } from "react";
 import { useFormStatus } from "react-dom";
 
 export default function SubmitButton({
+  className,
   label,
   icon,
   variant = "default",
   size = "default",
   disabled = false,
 }: {
+  className?: string;
   label?: string;
   icon?: React.ReactElement & { props: { className?: string } };
   variant?:
@@ -27,6 +29,7 @@ export default function SubmitButton({
   const { pending } = useFormStatus();
   return (
     <Button
+      className={className}
       type="submit"
       disabled={pending || disabled}
       size={size}

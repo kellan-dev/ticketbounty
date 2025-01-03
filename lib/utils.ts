@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export function isOwner(
   authUser?: AuthUser | null,
-  entity?: { userId: AuthUser["id"] } | null,
+  entity?: { userId: AuthUser["id"] | null } | null,
 ) {
   if (!entity?.userId) return false;
   return authUser?.id === entity.userId;
