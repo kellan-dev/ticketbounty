@@ -16,9 +16,10 @@ import useConfirmDialog from "@/hooks/use-confirm-dialog";
 
 type Props = {
   comment: CommentWithMetadata;
+  onDelete: () => void;
 };
 
-export default function CommentItemMenu({ comment }: Props) {
+export default function CommentItemMenu({ comment, onDelete }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
   const [deleteButton, deleteDialog] = useConfirmDialog({
@@ -29,6 +30,7 @@ export default function CommentItemMenu({ comment }: Props) {
         <span>Delete</span>
       </DropdownMenuItem>
     ),
+    onSuccess: () => onDelete(),
   });
 
   return (

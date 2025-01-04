@@ -5,9 +5,10 @@ import { format } from "date-fns";
 
 type Props = {
   comment: CommentWithMetadata;
+  onDelete: () => void;
 };
 
-export default function CommentItem({ comment }: Props) {
+export default function CommentItem({ comment, onDelete }: Props) {
   return (
     <Card className="group relative flex flex-1 flex-col gap-y-1 p-4">
       <div className="flex justify-between">
@@ -19,7 +20,9 @@ export default function CommentItem({ comment }: Props) {
         </p>
       </div>
       <p className="whitespace-pre-line">{comment.content}</p>
-      {comment.isOwner && <CommentItemMenu comment={comment} />}
+      {comment.isOwner && (
+        <CommentItemMenu comment={comment} onDelete={onDelete} />
+      )}
     </Card>
   );
 }

@@ -7,7 +7,7 @@ export default function SignInPage() {
   return (
     <div className="flex flex-1 flex-col items-center justify-center">
       <CardCompact
-        className="w-full max-w-[420px] animate-fade-in-from-top"
+        className="w-full max-w-md animate-fade-in-from-top"
         title="Sign In"
         description="Sign in to your account"
         content={<SignInForm />}

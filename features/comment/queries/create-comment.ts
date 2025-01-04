@@ -22,15 +22,18 @@ export async function createComment(
 ) {
   const { user } = await lucia.authOrRedirect(paths.signIn());
 
+  let comment;
+
   try {
     const data = createCommentSchema.parse(Object.fromEntries(formData));
 
-    await prisma.comment.create({
+    comment = await prisma.comment.create({
       data: {
         userId: user.id,
         ticketId,
         content: data.content,
       },
+      include: { user: true },
     });
   } catch (error) {
     return fromErrorToActionState(error, formData);
@@ -38,5 +41,8 @@ export async function createComment(
 
   revalidatePath(paths.ticket(ticketId));
 
-  return toActionState("success", "Comment created");
+  return toActionState("success", "Comment created", undefined, {
+    ...comment,
+    isOwner: true,
+  });
 }

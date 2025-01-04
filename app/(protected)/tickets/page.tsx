@@ -21,7 +21,7 @@ export default async function Page({ searchParams }: Props) {
       <Heading title="My Tickets" description="Tickets created by you" />
 
       <CardCompact
-        className="w-full max-w-[420px] self-center"
+        className="w-full max-w-xl self-center"
         title="Create Ticket"
         description="A new ticket will be created"
         content={<TicketUpsertForm />}

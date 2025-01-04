@@ -18,7 +18,6 @@ import { cn } from "@/lib/utils";
 import { Prisma } from "@prisma/client";
 import { toCurrencyFromCents } from "@/lib/currency";
 import TicketMoreMenu from "./ticket-more-menu";
-import CommentCreateForm from "@/features/comment/components/comment-create-form";
 
 type Props = {
   ticket: Prisma.TicketGetPayload<{
@@ -26,6 +25,7 @@ type Props = {
   }> & { isOwner: boolean };
   comments?: React.ReactNode;
   isDetail?: boolean;
+  numComments?: number;
 };
 
 export default function TicketItem({ ticket, comments, isDetail }: Props) {
@@ -58,13 +58,8 @@ export default function TicketItem({ ticket, comments, isDetail }: Props) {
   );
 
   return (
-    <div
-      className={cn(
-        "flex w-full max-w-[420px] flex-col gap-y-8",
-        isDetail ? "max-w-[580px]" : "max-w-[420px]",
-      )}
-    >
-      <div className="flex gap-x-1">
+    <div className="flex w-full max-w-xl flex-col gap-y-8">
+      <div className={cn("flex", ticket.isOwner && "gap-x-1")}>
         <Card className="w-full">
           <CardHeader>
             <CardTitle className="flex items-center gap-x-2">
@@ -105,7 +100,7 @@ export default function TicketItem({ ticket, comments, isDetail }: Props) {
       </div>
       {isDetail && (
         <div className="ml-4 flex flex-col gap-y-4">
-          <CommentCreateForm ticketId={ticket.id} />
+          {/* <CommentCreateForm ticketId={ticket.id} numComments={numComments} /> */}
           {comments}
         </div>
       )}

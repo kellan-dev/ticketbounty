@@ -34,7 +34,7 @@ export default async function Page({ params }: Props) {
       <Separator />
       <div className="flex flex-1 flex-col items-center justify-center">
         <CardCompact
-          className="w-full max-w-[420px] animate-fade-in-from-top"
+          className="w-full max-w-xl animate-fade-in-from-top"
           title="Edit Ticket"
           description="Edit an existing ticket"
           content={<TicketUpsertForm ticket={ticket} />}

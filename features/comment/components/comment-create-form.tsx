@@ -3,27 +3,47 @@
 import { Textarea } from "@/components/ui/textarea";
 import { createComment } from "../queries/create-comment";
 import { useActionState } from "react";
-import { EMPTY_ACTION_STATE } from "@/components/form/utils/to-action-state";
+import {
+  ActionState,
+  EMPTY_ACTION_STATE,
+} from "@/components/form/utils/to-action-state";
 import Form from "@/components/form/form";
 import SubmitButton from "@/components/form/submit-button";
 import FieldError from "@/components/form/field-error";
 import { LucideSend } from "lucide-react";
+import { CommentWithMetadata } from "../types";
 
 type Props = {
   ticketId: string;
+  numComments?: number;
+  onCreate?: (comment: CommentWithMetadata) => void;
 };
 
-export default function CommentCreateForm({ ticketId }: Props) {
+export default function CommentCreateForm({
+  ticketId,
+  numComments,
+  onCreate,
+}: Props) {
   const [state, action] = useActionState(
     createComment.bind(null, ticketId),
     EMPTY_ACTION_STATE,
   );
+
+  const handleSuccess = (state: ActionState) => {
+    const comment = state.data as CommentWithMetadata;
+    onCreate?.(comment);
+  };
+
   return (
-    <Form action={action} state={state}>
+    <Form action={action} state={state} onSuccess={handleSuccess}>
       <Textarea
         name="content"
-        placeholder="✏ What's on your mind?"
-        className="bg-card"
+        placeholder={
+          numComments
+            ? "✏  What's on your mind?"
+            : "✏  Be the first to comment on this issue..."
+        }
+        className="bg-card p-4 text-sm"
       />
       <FieldError name="content" state={state} />
       <SubmitButton

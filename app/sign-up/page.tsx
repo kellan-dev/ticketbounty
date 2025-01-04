@@ -7,7 +7,7 @@ export default function SignUpPage() {
   return (
     <div className="flex flex-1 flex-col items-center justify-center">
       <CardCompact
-        className="w-full max-w-[420px] animate-fade-in-from-top"
+        className="w-full max-w-md animate-fade-in-from-top"
         title="Sign Up"
         description="Create a new account to get started"
         content={<SignUpForm />}

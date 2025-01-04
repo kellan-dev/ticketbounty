@@ -172,13 +172,16 @@ export const seedTickets: {
   },
 ];
 
-// Generate 0-10 comments for each ticket
+// Generate 10-30 comments for each ticket (except the last one which has 0)
 const generateComments = (
   ticketId: string,
   users: { id: string }[],
   ticketCreatedAt: Date,
+  isLastTicket: boolean,
 ) => {
-  const numComments = Math.floor(Math.random() * 11); // 0 to 10 comments
+  if (isLastTicket) return [];
+
+  const numComments = Math.floor(Math.random() * 21) + 10; // 10 to 30 comments
   if (numComments === 0) return [];
 
   // Generate sorted dates for comments (1-10 days after ticket)
@@ -272,8 +275,13 @@ const seed = async () => {
 
   // create the comments
   const users = [admin, alice, bob];
-  const seedComments = createdTickets.flatMap((ticket) =>
-    generateComments(ticket.id, users, ticket.createdAt),
+  const seedComments = createdTickets.flatMap((ticket, index) =>
+    generateComments(
+      ticket.id,
+      users,
+      ticket.createdAt,
+      index === createdTickets.length - 1,
+    ),
   );
   await prisma.comment.createMany({
     data: seedComments,

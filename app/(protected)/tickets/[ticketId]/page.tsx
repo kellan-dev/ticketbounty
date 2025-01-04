@@ -26,7 +26,7 @@ export default async function Page({ params }: Props) {
   const ticketPromise = getTicket(ticketId);
   const commentsPromise = getComments(ticketId);
 
-  const [ticket, comments] = await Promise.all([
+  const [ticket, paginatedComments] = await Promise.all([
     ticketPromise,
     commentsPromise,
   ]);
@@ -46,7 +46,12 @@ export default async function Page({ params }: Props) {
         <TicketItem
           ticket={ticket}
           isDetail
-          comments={<Comments comments={comments} />}
+          comments={
+            <Comments
+              ticketId={ticket.id}
+              paginatedComments={paginatedComments}
+            />
+          }
         />
       </div>
     </div>
