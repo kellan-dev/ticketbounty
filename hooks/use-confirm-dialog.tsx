@@ -1,5 +1,4 @@
-import Form from "@/components/form/form";
-import SubmitButton from "@/components/form/submit-button";
+import useActionFeedback from "@/components/form/hooks/use-action-feedback";
 import {
   ActionState,
   EMPTY_ACTION_STATE,
@@ -14,13 +13,19 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { cloneElement, useActionState, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { cloneElement, useActionState, useEffect, useState } from "react";
+import { toast } from "sonner";
+
+type ReactElementWithOnClick = React.ReactElement<{ onClick?: () => void }>;
 
 type Options = {
   title?: string;
   description?: string;
   action: () => Promise<ActionState>;
-  trigger: React.ReactElement<{ onClick?: () => void }>;
+  trigger:
+    | ReactElementWithOnClick
+    | ((isPending: boolean) => ReactElementWithOnClick);
   onSuccess?: (state: ActionState) => void;
 };
 
@@ -32,16 +37,35 @@ export default function useConfirmDialog({
   onSuccess,
 }: Options) {
   const [isOpen, setIsOpen] = useState(false);
-  const dialogTrigger = cloneElement(trigger, {
-    onClick: () => setIsOpen((s) => !s),
+
+  const [state, formAction, isPending] = useActionState(
+    action,
+    EMPTY_ACTION_STATE,
+  );
+
+  useActionFeedback(state, {
+    onSuccess: ({ state }) => {
+      if (state.message) toast.success(state.message);
+      onSuccess?.(state);
+    },
+    onError: ({ state }) => {
+      if (state.message) toast.error(state.message);
+    },
   });
 
-  const [state, formAction] = useActionState(action, EMPTY_ACTION_STATE);
+  useEffect(() => {
+    if (isPending) toast.loading("Processing...", { id: "processing" });
+    return () => {
+      toast.dismiss("processing");
+    };
+  }, [isPending, state.status]);
 
-  const handleSuccess = () => {
-    setIsOpen(false);
-    onSuccess?.(state);
-  };
+  const dialogTrigger = cloneElement(
+    typeof trigger === "function" ? trigger(isPending) : trigger,
+    {
+      onClick: () => setIsOpen((s) => !s),
+    },
+  );
 
   const dialog = (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
@@ -53,9 +77,9 @@ export default function useConfirmDialog({
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction asChild>
-            <Form action={formAction} state={state} onSuccess={handleSuccess}>
-              <SubmitButton label="Confirm" />
-            </Form>
+            <form action={formAction}>
+              <Button type="submit">Confirm</Button>
+            </form>
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

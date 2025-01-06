@@ -11,6 +11,7 @@ import { lucia } from "@/lib/lucia";
 import { isOwner } from "@/lib/utils";
 
 export async function deleteComment(id: string) {
+  await new Promise((resolve) => setTimeout(resolve, 3000));
   const { user } = await lucia.authOrRedirect(paths.signIn());
 
   const comment = await prisma.comment.findUnique({ where: { id } });
