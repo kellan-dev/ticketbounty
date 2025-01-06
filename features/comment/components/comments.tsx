@@ -6,13 +6,11 @@ import { Button } from "@/components/ui/button";
 import { getComments } from "../queries/get-comments";
 import { useState } from "react";
 import CommentCreateForm from "./comment-create-form";
+import { PaginatedData } from "@/types/pagination";
 
 type Props = {
   ticketId: string;
-  paginatedComments: {
-    list: CommentWithMetadata[];
-    metadata: { count: number; hasNextPage: boolean };
-  };
+  paginatedComments: PaginatedData<CommentWithMetadata>;
 };
 
 export default function Comments({ ticketId, paginatedComments }: Props) {
@@ -20,7 +18,10 @@ export default function Comments({ ticketId, paginatedComments }: Props) {
   const [metadata, setMetadata] = useState(paginatedComments.metadata);
 
   const handleMore = async () => {
-    const morePaginatedComments = await getComments(ticketId, comments.length);
+    const morePaginatedComments = await getComments(
+      ticketId,
+      metadata.nextCursor,
+    );
     const moreComments = morePaginatedComments.list;
     setComments([...comments, ...moreComments]);
     setMetadata(morePaginatedComments.metadata);

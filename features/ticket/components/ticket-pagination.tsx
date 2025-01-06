@@ -8,11 +8,13 @@ import {
   searchParser,
 } from "@/features/ticket/search-params";
 import Pagination from "@/components/pagination";
+import { PaginatedData } from "@/types/pagination";
+import { TicketWithMetadata } from "../types";
 
 export default function TicketPagination({
   metadata,
 }: {
-  metadata: { count: number; hasNextPage: boolean };
+  metadata: PaginatedData<TicketWithMetadata>["metadata"];
 }) {
   const [pagination, setPagination] = useQueryStates(
     paginationParser,

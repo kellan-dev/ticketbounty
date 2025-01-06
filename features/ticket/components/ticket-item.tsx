@@ -15,14 +15,12 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Prisma } from "@prisma/client";
 import { toCurrencyFromCents } from "@/lib/currency";
 import TicketMoreMenu from "./ticket-more-menu";
+import { TicketWithMetadata } from "../types";
 
 type Props = {
-  ticket: Prisma.TicketGetPayload<{
-    include: { user: { select: { username: true } } };
-  }> & { isOwner: boolean };
+  ticket: TicketWithMetadata;
   comments?: React.ReactNode;
   isDetail?: boolean;
   numComments?: number;
