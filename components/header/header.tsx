@@ -17,8 +17,10 @@ export default async function Header() {
         <div className="flex items-center gap-x-2">
           <Button asChild variant="ghost">
             <Link href={paths.home()}>
-              <LucideKanban className="!h-6 !w-6" />
-              <h1 className="text-lg font-semibold">TicketBounty</h1>
+              <LucideKanban className="!h-6 !w-6 dark:text-primary" />
+              <h1 className="text-lg font-semibold dark:text-primary">
+                TicketBounty
+              </h1>
             </Link>
           </Button>
         </div>

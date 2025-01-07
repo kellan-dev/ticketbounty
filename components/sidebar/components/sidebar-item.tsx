@@ -21,7 +21,7 @@ export default function SidebarItem({ isOpen, navItem, isActive }: Props) {
         className={cn(
           buttonVariants({ variant: "ghost" }),
           "group relative flex h-12 justify-start",
-          isActive && "bg-muted font-bold",
+          isActive && "bg-muted font-bold dark:text-primary",
         )}
       >
         {cloneElement(navItem.icon, {
