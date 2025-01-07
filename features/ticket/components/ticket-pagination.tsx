@@ -8,7 +8,7 @@ import {
   searchParser,
 } from "@/features/ticket/search-params";
 import Pagination from "@/components/pagination";
-import { PaginatedData } from "@/types/pagination";
+import { PaginatedData } from "@/lib/types/pagination";
 import { TicketWithMetadata } from "../types";
 
 export default function TicketPagination({

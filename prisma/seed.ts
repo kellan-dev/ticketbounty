@@ -248,7 +248,7 @@ const seed = async () => {
   await prisma.user.deleteMany({});
   await prisma.ticket.deleteMany({});
 
-  // create the user
+  // create the users
   const passwordHash = await hash("password");
   const admin = await prisma.user.create({
     data: { username: "admin", email: "admin@admin.com", passwordHash },

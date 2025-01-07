@@ -1,7 +1,7 @@
 "use client";
 
 import { Textarea } from "@/components/ui/textarea";
-import { createComment } from "../queries/create-comment";
+import { createComment } from "../actions/create-comment";
 import { useActionState } from "react";
 import {
   ActionState,
@@ -24,7 +24,7 @@ export default function CommentCreateForm({
   numComments,
   onCreate,
 }: Props) {
-  const [state, action] = useActionState(
+  const [state, action, isPending] = useActionState(
     createComment.bind(null, ticketId),
     EMPTY_ACTION_STATE,
   );
@@ -41,7 +41,7 @@ export default function CommentCreateForm({
         placeholder={
           numComments
             ? "✏  What's on your mind?"
-            : "✏  Be the first to comment on this issue..."
+            : "✏  Be the first to comment on this issue"
         }
         className="bg-card p-4 text-sm"
       />
@@ -50,6 +50,8 @@ export default function CommentCreateForm({
         icon={<LucideSend />}
         variant="outline"
         size="icon"
+        pending={isPending}
+        disabled={isPending}
         className="aspect-circle self-end"
       />
     </Form>

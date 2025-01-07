@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { LucideLoaderCircle } from "lucide-react";
 import { cloneElement } from "react";
-import { useFormStatus } from "react-dom";
 
 export default function SubmitButton({
   className,
@@ -12,6 +11,7 @@ export default function SubmitButton({
   variant = "default",
   size = "default",
   disabled = false,
+  pending = false,
 }: {
   className?: string;
   label?: string;
@@ -25,8 +25,8 @@ export default function SubmitButton({
     | "link";
   size?: "default" | "sm" | "lg" | "icon";
   disabled?: boolean;
+  pending?: boolean;
 }) {
-  const { pending } = useFormStatus();
   return (
     <Button
       className={className}

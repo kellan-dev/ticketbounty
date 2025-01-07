@@ -13,7 +13,7 @@ export default async function TicketList({ userId, searchParams }: Props) {
 
   return (
     <section className="flex flex-1 animate-fade-in-from-top flex-col items-center gap-y-4">
-      <div className="grid w-full max-w-xl grid-cols-[auto_160px] gap-x-2">
+      <div className="grid w-full max-w-2xl grid-cols-[auto_160px] gap-x-2">
         <TicketSearchInput placeholder="Search tickets..." />
         <TicketSortSelect
           options={[
@@ -35,7 +35,7 @@ export default async function TicketList({ userId, searchParams }: Props) {
       ) : (
         <Placeholder label="No tickets found" />
       )}
-      <div className="w-full max-w-xl">
+      <div className="w-full max-w-2xl">
         <TicketPagination metadata={metadata} />
       </div>
     </section>

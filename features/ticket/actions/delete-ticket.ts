@@ -1,6 +1,6 @@
 "use server";
 
-import { setCookieByKey } from "@/actions/cookies";
+import { setCookieByKey } from "@/lib/actions/cookies";
 import { fromErrorToActionState } from "@/components/form/utils/to-action-state";
 import { paths } from "@/lib/paths";
 import { prisma } from "@/lib/prisma";

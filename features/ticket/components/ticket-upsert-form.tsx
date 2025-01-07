@@ -21,7 +21,7 @@ type Props = {
 };
 
 export default function TicketUpsertForm({ ticket }: Props) {
-  const [state, action] = useActionState(
+  const [state, action, isPending] = useActionState(
     upsertTicket.bind(null, ticket?.id),
     EMPTY_ACTION_STATE,
   );
@@ -83,7 +83,12 @@ export default function TicketUpsertForm({ ticket }: Props) {
         </div>
       </div>
 
-      <SubmitButton label={ticket ? "Update" : "Create"} />
+      <SubmitButton
+        label={ticket ? "Update Ticket" : "Create Ticket"}
+        pending={isPending}
+        disabled={isPending}
+        className="self-end"
+      />
     </Form>
   );
 }

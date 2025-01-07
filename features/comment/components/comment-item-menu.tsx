@@ -11,7 +11,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { CommentWithMetadata } from "../types";
-import { deleteComment } from "../queries/delete-comment";
+import { deleteComment } from "../actions/delete-comment";
 import useConfirmDialog from "@/hooks/use-confirm-dialog";
 
 type Props = {

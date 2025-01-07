@@ -5,7 +5,7 @@ import { lucia } from "@/lib/lucia";
 import { paths } from "@/lib/paths";
 import Breadcrumbs from "@/components/breadcrumbs";
 import { Separator } from "@/components/ui/separator";
-import { getComments } from "@/features/comment/queries/get-comments";
+import { getComments } from "@/features/comment/actions/get-comments";
 import Comments from "@/features/comment/components/comments";
 
 // Params are async now, so we need to use a Promise

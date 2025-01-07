@@ -76,7 +76,7 @@ export default function useConfirmDialog({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction asChild>
+          <AlertDialogAction className="p-0" asChild>
             <form action={formAction}>
               <Button type="submit">Confirm</Button>
             </form>

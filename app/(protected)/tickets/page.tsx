@@ -18,12 +18,15 @@ export default async function Page({ searchParams }: Props) {
 
   return (
     <div className="flex flex-1 flex-col gap-y-8">
-      <Heading title="My Tickets" description="Tickets created by you" />
+      <Heading
+        title="My Tickets"
+        description="Browse and manage tickets created by you"
+      />
 
       <CardCompact
-        className="w-full max-w-xl self-center"
+        className="w-full max-w-2xl self-center"
         title="Create Ticket"
-        description="A new ticket will be created"
+        description="Provide a short title and detailed task description"
         content={<TicketUpsertForm />}
       />
 

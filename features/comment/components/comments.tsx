@@ -2,9 +2,9 @@
 
 import CommentItem from "./comment-item";
 import { CommentWithMetadata } from "../types";
-import { getComments } from "../queries/get-comments";
+import { getComments } from "../actions/get-comments";
 import CommentCreateForm from "./comment-create-form";
-import { PaginatedData } from "@/types/pagination";
+import { PaginatedData } from "@/lib/types/pagination";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";

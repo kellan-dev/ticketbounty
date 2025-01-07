@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { PaginatedData } from "@/types/pagination";
+import { PaginatedData } from "@/lib/types/pagination";
 
 type PageAndSize = {
   page: number;

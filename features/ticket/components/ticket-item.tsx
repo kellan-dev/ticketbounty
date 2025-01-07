@@ -56,8 +56,10 @@ export default function TicketItem({ ticket, comments, isDetail }: Props) {
   );
 
   return (
-    <div className="flex w-full max-w-xl flex-col gap-y-8">
-      <div className={cn("flex", ticket.isOwner && "gap-x-1")}>
+    <div className="flex w-full max-w-2xl flex-col gap-y-8">
+      <div
+        className={cn("flex gap-x-1", isDetail && !ticket.isOwner && "gap-0")}
+      >
         <Card className="w-full">
           <CardHeader>
             <CardTitle className="flex items-center gap-x-2">
@@ -96,12 +98,7 @@ export default function TicketItem({ ticket, comments, isDetail }: Props) {
           {moreMenu}
         </div>
       </div>
-      {isDetail && (
-        <div className="ml-4 flex flex-col gap-y-4">
-          {/* <CommentCreateForm ticketId={ticket.id} numComments={numComments} /> */}
-          {comments}
-        </div>
-      )}
+      {isDetail && <div className="ml-4 flex flex-col gap-y-4">{comments}</div>}
     </div>
   );
 }

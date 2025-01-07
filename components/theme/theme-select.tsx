@@ -51,4 +51,4 @@ function Item({ item }: { item: string }) {
   );
 }
 
-// dark (this comment is included due to a next-themes quirk)
+// dark (this comment is included due to a next-themes/tailwind quirk)

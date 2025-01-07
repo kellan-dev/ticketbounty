@@ -22,6 +22,7 @@ export const paths = {
   accountPassword,
 };
 
+// TODO: This needs some work. For example, a ticket's details page will cause "My Tickets" to be active, even if the ticket doesn't belong to the user.
 export function getActivePath(
   path: string,
   paths: string[],

@@ -1,6 +1,6 @@
 "use server";
 
-import { setCookieByKey } from "@/actions/cookies";
+import { setCookieByKey } from "@/lib/actions/cookies";
 import {
   ActionState,
   fromErrorToActionState,
@@ -16,7 +16,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 
 const upsertTicketSchema = z.object({
-  // Todo: Figure out where 191 comes from
+  // TODO: Figure out where 191 comes from
   title: z.string().min(1).max(191),
   content: z.string().min(1).max(1024),
   bounty: z.coerce.number().positive(),

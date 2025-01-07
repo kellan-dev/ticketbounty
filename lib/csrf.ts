@@ -1,5 +1,7 @@
 import { headers } from "next/headers";
 
+// TODO: Learn how to maintain these protections while also allowing a mobile app to make requests.
+
 /**
  * Provides CSRF protection for API endpoints that should only be accessible from the same origin (e.g., our application).
  */
