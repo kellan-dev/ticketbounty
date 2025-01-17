@@ -19,6 +19,8 @@ model User {
   sessions Session[]
   tickets  Ticket[]
   comments Comment[]
+
+  @@map("ticketbounty_user")
 }
 
 model Session {
@@ -31,6 +33,7 @@ model Session {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+  @@map("ticketbounty_session")
 }
 
 model Ticket {
@@ -49,6 +52,7 @@ model Ticket {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+  @@map("ticketbounty_ticket")
 }
 
 enum TicketStatus {
@@ -70,4 +74,5 @@ model Comment {
 
   @@index([userId])
   @@index([ticketId])
+  @@map("ticketbounty_comment")
 }
